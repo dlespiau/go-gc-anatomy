@@ -10,16 +10,15 @@ v0.1
 This article is the results of notes taken while walking through gc, the
 compiler distributed as part of the https://golang.org/[Go project].
 
+== The basics
 
-== Quick history
+=== Quick history
 
 - go rewrite
 - link to video
 - SSA
 
 Talk about gccgo/llgo. 
-
-== The basics
 
 === Invoking the go compiler
 
