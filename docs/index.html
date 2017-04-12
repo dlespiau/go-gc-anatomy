@@ -521,16 +521,28 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_quick_history">Quick history</a></li>
 <li><a href="#_the_basics">The basics</a>
 <ul class="sectlevel2">
-<li><a href="#_invoking_the_go_compiler">Invoking the go compiler</a></li>
+<li><a href="#_quick_history">Quick history</a></li>
+<li><a href="#_invoking_the_go_compiler">Invoking the Go compiler</a></li>
 <li><a href="#_filesystem_layout">Filesystem layout</a></li>
 <li><a href="#_compiler_options">Compiler options</a></li>
+<li><a href="#_sources">Sources</a></li>
 </ul>
 </li>
 <li><a href="#_escape_analysis">Escape Analysis</a></li>
 <li><a href="#_ssa">SSA</a></li>
+<li><a href="#_interaction_with_the_runtime">Interaction with the runtime</a>
+<ul class="sectlevel2">
+<li><a href="#_growing_stacks">Growing stacks</a></li>
+</ul>
+</li>
+<li><a href="#_chosen_pieces">Chosen pieces</a>
+<ul class="sectlevel2">
+<li><a href="#_go_calling_convention">Go calling convention</a></li>
+<li><a href="#_go_assembler">Go assembler</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -538,14 +550,16 @@ table.CodeRay td.code>pre{padding:0}
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This article is the results of notes taken while walking through gc, the
+<p>This article is the results of notes taken while walking through <code>gc</code>, the
 compiler distributed as part of the <a href="https://golang.org/">Go project</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_quick_history">Quick history</h2>
+<h2 id="_the_basics">The basics</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_quick_history">Quick history</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -563,12 +577,8 @@ compiler distributed as part of the <a href="https://golang.org/">Go project</a>
 <p>Talk about gccgo/llgo.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_the_basics">The basics</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_invoking_the_go_compiler">Invoking the go compiler</h3>
+<h3 id="_invoking_the_go_compiler">Invoking the Go compiler</h3>
 <div class="paragraph">
 <p><code>go build</code> invokes separate compiler and linker binaries behind the scenes
 as shown by the <code>-x</code> option:</p>
@@ -587,7 +597,7 @@ cp $WORK/_/home/damien/src/hello-world/_obj/exe/a.out hello-world</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The go compiler is really the <code>compile</code> tool. The <code>compile</code> tool can be
+<p>The Go compiler is really the <code>compile</code> tool. The <code>compile</code> tool can be
 invoked on its own:</p>
 </div>
 <div class="listingblock">
@@ -602,7 +612,7 @@ main.go  main.o</code></pre>
 <h3 id="_filesystem_layout">Filesystem layout</h3>
 <div class="paragraph">
 <p>While to the <code>go</code> binary is in <code>$GOROOT/bin</code>, tools are located in
-<code>$GOROOT/pkg/tool/$GOOS_$GOARCH</code>. On Linux with x86-64 processor, the compiler
+<code>$GOROOT/pkg/tool/$GOOS_$GOARCH</code>. On Linux with x86‑64 processor, the compiler
 can be found in <code>$GOROOT/pkg/tool/linux_amd64</code>.</p>
 </div>
 </div>
@@ -654,6 +664,14 @@ parameter, eg. <code>go build -gcflags '-m'</code>.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>When applicable, I&#8217;ll indicate how to get relevant debugging information for
+the topic discussed in the rest of this article.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sources">Sources</h3>
+
 </div>
 </div>
 </div>
@@ -669,11 +687,33 @@ parameter, eg. <code>go build -gcflags '-m'</code>.
 
 </div>
 </div>
+<div class="sect1">
+<h2 id="_interaction_with_the_runtime">Interaction with the runtime</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_growing_stacks">Growing stacks</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_chosen_pieces">Chosen pieces</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_go_calling_convention">Go calling convention</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_go_assembler">Go assembler</h3>
+
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2017-04-12 17:32:41 BST
+Last updated 2017-04-12 22:10:05 BST
 </div>
 </div>
 </body>
