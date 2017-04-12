@@ -92,6 +92,18 @@ parameter, eg. `go build -gcflags '-m'`.
 When applicable, I'll indicate how to get relevant debugging information for
 the topic discussed in the rest of this article.
 
+=== Sources
+
 == Escape Analysis
 
 == SSA
+
+== Interaction with the runtime
+
+=== Growing stacks
+
+== Chosen pieces
+
+=== Go calling convention
+
+=== Go assembler
