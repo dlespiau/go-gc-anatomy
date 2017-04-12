@@ -79,7 +79,6 @@ func main() {
 The `-m` option tells us about optimisation decisions the compiler has done.
 In this instance `printHelloWorld` can be inlined.
 
-
 [source,shell]
 ----
 $ go tool compile -m main.go
