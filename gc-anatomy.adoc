@@ -20,7 +20,7 @@ compiler distributed as part of the https://golang.org/[Go project].
 
 Talk about gccgo/llgo. 
 
-=== Invoking the go compiler
+=== Invoking the Go compiler
 
 `go build` invokes separate compiler and linker binaries behind the scenes
 as shown by the `-x` option:
@@ -38,7 +38,7 @@ $GOROOT/pkg/tool/linux_amd64/link -o $WORK/_/home/damien/src/hello-world/_obj/ex
 cp $WORK/_/home/damien/src/hello-world/_obj/exe/a.out hello-world
 ----
 
-The go compiler is really the `compile` tool. The `compile` tool can be
+The Go compiler is really the `compile` tool. The `compile` tool can be
 invoked on its own:
 
 [source,shell]
