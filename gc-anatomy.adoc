@@ -7,7 +7,7 @@ v0.1
 :source-highlighter: coderay
 :quick-uri: http://dlespiau.github.io/go-gc-anatomy/
 
-This article is the results of notes taken while walking through gc, the
+This article is the results of notes taken while walking through `gc`, the
 compiler distributed as part of the https://golang.org/[Go project].
 
 == The basics
