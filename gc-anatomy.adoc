@@ -1,0 +1,96 @@
+= Anatomy of the Go compiler
+Damien Lespiau <damien.lespiau@intel.com>
+v0.1
+:toc:
+:icons: font
+:hide-uri-scheme:
+:source-highlighter: coderay
+:quick-uri: http://dlespiau.github.io/go-gc-anatomy/
+
+This article is the results of notes taken while walking through gc, the
+compiler distributed as part of the https://golang.org/[Go project].
+
+
+== Quick history
+
+- go rewrite
+- link to video
+- SSA
+
+Talk about gccgo/llgo. 
+
+== The basics
+
+=== Invoking the go compiler
+
+`go build` invokes separate compiler and linker binaries behind the scenes
+as shown by the `-x` option:
+
+[source%nowrap,shell]
+----
+$ go build -x
+WORK=/tmp/go-build049312878
+mkdir -p $WORK/_/home/damien/src/hello-world/_obj/
+mkdir -p $WORK/_/home/damien/src/hello-world/_obj/exe/
+cd /home/damien/src/hello-world
+$GOROOT/pkg/tool/linux_amd64/compile -o $WORK/_/home/damien/src/hello-world.a -trimpath $WORK -p main -complete -buildid b41aca5027f01d4edf98e1676ee20bd7375510e3 -D _/home/damien/src/hello-world -I $WORK -pack ./main.go
+cd .
+$GOROOT/pkg/tool/linux_amd64/link -o $WORK/_/home/damien/src/hello-world/_obj/exe/a.out -L $WORK -extld=gcc -buildmode=exe -buildid=b41aca5027f01d4edf98e1676ee20bd7375510e3 $WORK/_/home/damien/src/hello-world.a
+cp $WORK/_/home/damien/src/hello-world/_obj/exe/a.out hello-world
+----
+
+The go compiler is really the `compile` tool. The `compile` tool can be
+invoked on its own:
+
+[source,shell]
+----
+$ go tool compile main.go
+$ ls main*
+main.go  main.o
+----
+
+=== Filesystem layout
+
+While to the `go` binary is in `$GOROOT/bin`, tools are located in
+`$GOROOT/pkg/tool/$GOOS_$GOARCH`. On Linux with x86-64 processor, the compiler
+can be found in `$GOROOT/pkg/tool/linux_amd64`.
+
+=== Compiler options
+
+The compiler has quite a few options to play with. Most of them are to
+support the integration with `go build`. Some, however, can help
+understanding and debugging the compiler itself.
+
+Consider the following Hello World program.
+
+[source,go]
+----
+package main
+
+func printHelloWorld() {
+        println("Hello, World!")
+}
+
+func main() {
+        printHelloWorld()
+}
+----
+
+The `-m` option tells us about optimisation decisions the compiler has done.
+In this instance `printHelloWorld` can be inlined.
+
+
+[source,shell]
+----
+$ go tool compile -m main.go
+main.go:3: can inline printHelloWorld
+main.go:7: can inline main
+main.go:8: inlining call to printHelloWorld
+----
+
+NOTE: Compiler options can be passed from `go build` as well with the `-gcflags`
+parameter, eg. `go build -gcflags '-m'`.
+
+== Escape Analysis
+
+== SSA
