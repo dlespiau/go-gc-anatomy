@@ -89,6 +89,9 @@ main.go:8: inlining call to printHelloWorld
 NOTE: Compiler options can be passed from `go build` as well with the `-gcflags`
 parameter, eg. `go build -gcflags '-m'`.
 
+When applicable, I'll indicate how to get relevant debugging information for
+the topic discussed in the rest of this article.
+
 == Escape Analysis
 
 == SSA
