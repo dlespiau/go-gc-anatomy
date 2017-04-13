@@ -6,3 +6,5 @@ addons:
       - aspell-en
 script:
   - make check
+notifications:
+  email: false
