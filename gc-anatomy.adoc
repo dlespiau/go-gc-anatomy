@@ -51,8 +51,8 @@ main.go  main.o
 === Filesystem layout
 
 While to the `go` binary is in `$GOROOT/bin`, tools are located in
-`$GOROOT/pkg/tool/$GOOS_$GOARCH`. On Linux with x86‑64 processor, the compiler
-can be found in `$GOROOT/pkg/tool/linux_amd64`.
+`$GOROOT/pkg/tool/$GOOS_$GOARCH`. On Linux with an x86‑64 processor, the
+compiler can be found in `$GOROOT/pkg/tool/linux_amd64`.
 
 === Compiler options
 
