@@ -11,6 +11,5 @@ check:
 		--add-extra-dicts=./.aspell/extra.pws \
 		list < tmp-aspell.adoc | \
 	tee /dev/tty | \
-	wc -l | xargs -I % bash -c "test % -eq 0" || \
-	rm -f tmp-aspell.adoc
+	wc -l | xargs -I % bash -c "test % -eq 0"
 	@rm -f tmp-aspell.adoc
