@@ -1,5 +1,5 @@
 = Anatomy of the Go compiler
-Damien Lespiau <damien.lespiau@intel.com>
+Damien Lespiau <damien.lespiau@gmail.com>
 v0.1
 :toc:
 :icons: font
