@@ -1,0 +1,5 @@
+inlining/inlined/inlined.go:5: can inline add
+inlining/inlined/inlined.go:10: inlining call to add
+inlining/inlined/inlined.go:10: "1 + 1 =" escapes to heap
+inlining/inlined/inlined.go:10: add(1, 1) escapes to heap
+inlining/inlined/inlined.go:10: main ... argument does not escape

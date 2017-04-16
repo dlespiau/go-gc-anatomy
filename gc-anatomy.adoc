@@ -96,7 +96,65 @@ the topic discussed in the rest of this article.
 
 == Escape Analysis
 
-== SSA
+=== Inlining
+
+https://en.wikipedia.org/wiki/Inline_expansion[Inlining] is quite an important
+optimisation. Not only it removes some function call overhead but, more
+importantly, it enables further function-wide optimisations at a later stage.
+
+The inlining code is in @@src/cmd/compile/internal/gc/inl.go@@ with a nice
+explanatory comment at the top of the file. A first pass in
+@@src/cmd/compile/internal/gc/inl.go:caninl@@ decides which functions can be
+inlined. A second pass, @@src/cmd/compile/internal/gc/inl.go:inlcalls@@, will
+expand inlinable functions at their call sites.
+
+@@src/cmd/compile/internal/gc/inl.go:ishairylist@@ and
+@@src/cmd/compile/internal/gc/inl.go:ishairy@@  walk the function and decide if
+it's too _hairy_ (ie. complex) to be inlined or not with a budget of 80 AST
+nodes.
+
+The Go compiler can inline across package boundaries.
+
+The inliner only inlines leaf functions (with
+https://github.com/golang/go/commit/77ccb16eb12f461eaea5fdf652a2e929dc154192[some exceptions^]).
+https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md[Mid-stack
+inlining^] is in the pipeline.
+
+The `-m` flag can be used to see the inliner in action:
+
+[source,go]
+----
+include::inlining/inlined/inlined.go[]
+----
+
+[source,shell]
+----
+$ go tool compile -m inlined.go
+include::inlining/inlined/inlined.output[]
+----
+
+The undocumented option `-m=2` gives more insights into the reasons the
+compiler doesn't inline certain functions.
+
+[source,go]
+----
+$ cat not-inlined.go
+include::inlining/not-inlined/not-inlined.go[]
+----
+
+[source,shell]
+----
+$ go tool compile -m=2 not-inlined.go
+include::inlining/not-inlined/not-inlined.output[]
+----
+
+=== Escape Analysis
+
+TODO
+
+=== SSA
+
+TODO
 
 == Interaction with the runtime
 
