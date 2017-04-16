@@ -17,6 +17,9 @@ check:
 	wc -l | xargs -I % bash -c "test % -eq 0"
 	@rm -f tmp-aspell.adoc
 
+checkout-go:
+	git clone https://github.com/golang/go.git
+
 output:
 	go tool compile -m=2 inlining/not-inlined/not-inlined.go &> inlining/not-inlined/not-inlined.output
 	go tool compile -m inlining/inlined/inlined.go &> inlining/inlined/inlined.output

@@ -5,6 +5,6 @@ addons:
       - aspell
       - aspell-en
 script:
-  - make check
+  - make checkout-go check
 notifications:
   email: false
