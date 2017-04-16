@@ -131,17 +131,31 @@ optimisations done at that level.
 9. Writing lots of output: machine code, DWARF symbols,
    type and reflection info, export data
 
-NOTE: It seems there's a will to get rid of the `gc` AST in favour of the
-`syntax` one (https://go-review.googlesource.com/c/40693/[source]) and
-eliminate one of the tree representations.
-
 === Initialisation
 
-TODO
+The entry point of the compiler is in @@src/cmd/compile/main.go@@ but the
+interesting entry point is really @@src/cmd/compile/internal/gc/main.go:Main@@
+in the `gc` package.
 
-The main function is in.
+Various tasks are done there: creating built-in packages like `unsafe`, setting
+up the https://golang.org/ref/spec#Blocks[universe block]
+(@@src/cmd/compile/internal/gc/universe.go@@), parsing the command line options
+and, finally building the https://en.wikipedia.org/wiki/Abstract_syntax_tree[AST]
+on which high-level passes are done.
 
-Talk about universe block.
+Once the files are parsed, the global variable
+@@src/cmd/compile/internal/gc/go.go:xtop@@ contains the list of top level `Nodes`.
+
+NOTE: There are actually two different AST. One in the
+@@src/cmd/compile/internal/syntax@@ package and one in the
+@@src/cmd/compile/internal/gc@@ package. The former is transformed into the
+latter right at the start (in @@src/cmd/compile/internal/gc/noder.go@@,
+@@src/cmd/compile/internal/gc/noder.go:parseFiles@@). It seems there's a will
+to get rid of the `gc` AST in favour of the `syntax` one
+(https://go-review.googlesource.com/c/40693/[source]).
+
+Of course, the reference to have handy when looking at the parsing code is the
+https://golang.org/ref/spec[The Go Programming Language Specification].
 
 === Inlining
 
