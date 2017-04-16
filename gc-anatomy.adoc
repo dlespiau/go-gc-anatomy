@@ -124,7 +124,7 @@ optimisations done at that level.
 4. Some gc AST passes: type checking, escape analysis, inlining,
    closure handling, expression evaluation ordering (order.go),
    and some lowering and optimisation (walk.go).
-5. Translation into the cmd/compile/internal/ssa SSA form.
+5. Translation into the `cmd/compile/internal/ssa` SSA form.
 6. Optimisation and lowering of SSA form.
 7. Translation from SSA form to assembler instructions.
 8. Translation from assembler instructions to machine code.
