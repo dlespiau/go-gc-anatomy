@@ -1,7 +1,10 @@
 source = gc-anatomy.adoc
 
-doc:
-	asciidoctor -D docs -o index.html $(source)
+doc: relocate
+	./relocate < $(source) | asciidoctor -D docs -o index.html -
+
+relocate: relocate.go
+	go build -o $@ $<
 
 check:
 	@sed '/----/,/----/d' < $(source) > tmp-aspell.adoc && \
