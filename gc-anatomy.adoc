@@ -14,11 +14,13 @@ compiler distributed as part of the https://golang.org/[Go project].
 
 === Quick history
 
+TODO
+
 - go rewrite
 - link to video
 - SSA
 
-Talk about gccgo/llgo. 
+Talk about gccgo/llgo.
 
 === Invoking the Go compiler
 
@@ -94,7 +96,36 @@ the topic discussed in the rest of this article.
 
 === Sources
 
-== Escape Analysis
+TODO
+
+== The journey of a go program
+
+=== Overview
+
+1. Initialisation.
+2. Lexical analysis and parsing into the `cmd/compile/internal/syntax` AST.
+3. Translation into the `cmd/compile/internal/gc` AST.
+4. Some gc AST passes: type checking, escape analysis, inlining,
+   closure handling, expression evaluation ordering (order.go),
+   and some lowering and optimisation (walk.go).
+5. Translation into the cmd/compile/internal/ssa SSA form.
+6. Optimisation and lowering of SSA form.
+7. Translation from SSA form to assembler instructions.
+8. Translation from assembler instructions to machine code.
+9. Writing lots of output: machine code, DWARF symbols,
+   type and reflection info, export data
+
+NOTE: It seems there's a will to get rid of the `gc` AST in favour of the
+`syntax` one (https://go-review.googlesource.com/c/40693/[source]) and
+eliminate one of the tree representations.
+
+=== Initialisation
+
+TODO
+
+The main function is in.
+
+Talk about universe block.
 
 === Inlining
 
@@ -160,8 +191,14 @@ TODO
 
 === Growing stacks
 
+TODO
+
 == Chosen pieces
 
 === Go calling convention
 
+TODO
+
 === Go assembler
+
+TODO
