@@ -96,7 +96,23 @@ the topic discussed in the rest of this article.
 
 === Sources
 
-TODO
+The entry point of the compiler is in @@src/cmd/compile@@ but the bulk of the
+code is in various internal packages starting by
+@@src/cmd/compile/internal/gc@@. The internal packages are split between
+compiler-specific ones in `src/cmd/compile/internal` and some used by several
+tools in `src/cmd/internal`. To list a few interesting ones:
+
+@@src/cmd/compile/internal/gc@@:: main package, AST, type checking, inlining,
+escape analysis, closure handling, some optimisations and lowering on the AST.
+
+@@src/cmd/compile/internal/syntax@@:: Lexical analysis, tokenization and
+building of the first AST representation.
+
+@@src/cmd/compile/internal/ssa@@:: The backend part of the compiler is an
+https://en.wikipedia.org/wiki/Static_single_assignment_form[SSA IR] with many
+optimisations done at that level.
+
+@@src/cmd/internal/obj@@:: Machine code generation.
 
 == The journey of a go program
 
