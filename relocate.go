@@ -42,7 +42,7 @@ func (r *relocator) DoFile(file string) (replace string, err error) {
 	if err != nil {
 		return "", nil
 	}
-	return fmt.Sprintf("%s[%s]", fileURL, path.Base(file)), nil
+	return fmt.Sprintf("%s[%s^]", fileURL, path.Base(file)), nil
 }
 
 func (r *relocator) DoFunction(file string, function string) (replace string, err error) {
@@ -65,7 +65,7 @@ func (r *relocator) DoFunction(file string, function string) (replace string, er
 				continue
 			}
 			pos := fset.Position(decl.Pos())
-			return fmt.Sprintf("%s#L%d[%s]", fileURL, pos.Line, function), nil
+			return fmt.Sprintf("%s#L%d[%s^]", fileURL, pos.Line, function), nil
 		}
 	}
 
