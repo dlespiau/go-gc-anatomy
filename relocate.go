@@ -40,7 +40,7 @@ func (r *relocator) fileURL(file string) (url string, err error) {
 func (r *relocator) DoFile(file string) (replace string, err error) {
 	fileURL, err := r.fileURL(file)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	return fmt.Sprintf("%s[`%s`^]", fileURL, path.Base(file)), nil
 }
