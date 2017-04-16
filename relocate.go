@@ -45,7 +45,7 @@ func (r *relocator) DoFile(file string) (replace string, err error) {
 	return fmt.Sprintf("%s[`%s`^]", fileURL, path.Base(file)), nil
 }
 
-func (r *relocator) DoFunction(file string, function string) (replace string, err error) {
+func (r *relocator) DoFunction(file string, symbol string) (replace string, err error) {
 	fileURL, err := r.fileURL(file)
 	if err != nil {
 		return "", err
@@ -57,19 +57,41 @@ func (r *relocator) DoFunction(file string, function string) (replace string, er
 		return "", err
 	}
 
+	var node ast.Node
 	for _, decl := range f.Decls {
 		switch decl.(type) {
 		case *ast.FuncDecl:
 			name := decl.(*ast.FuncDecl).Name.Name
-			if name != function {
+			if name != symbol {
 				continue
 			}
-			pos := fset.Position(decl.Pos())
-			return fmt.Sprintf("%s#L%d[`%s`^]", fileURL, pos.Line, function), nil
+			node = decl
+			goto out
+		case *ast.GenDecl:
+			gen := decl.(*ast.GenDecl)
+			if gen.Tok != token.CONST && gen.Tok != token.VAR {
+				continue
+			}
+
+			for _, spec := range gen.Specs {
+				for _, ident := range spec.(*ast.ValueSpec).Names {
+					if ident.Name != symbol {
+						continue
+					}
+					node = ident
+					goto out
+				}
+			}
 		}
 	}
 
-	return "", fmt.Errorf("couldn't find function %s in file %s", function, file)
+out:
+	if node != nil {
+		pos := fset.Position(node.Pos())
+		return fmt.Sprintf("%s#L%d[`%s`^]", fileURL, pos.Line, symbol), nil
+	}
+
+	return "", fmt.Errorf("couldn't find symbol %s in file %s", symbol, file)
 }
 
 func main() {
