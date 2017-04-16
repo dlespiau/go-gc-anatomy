@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Anatomy of the Go compiler</h1>
 <div class="details">
 <span id="author" class="author">Damien Lespiau</span><br>
-<span id="email" class="email"><a href="mailto:damien.lespiau@intel.com">damien.lespiau@intel.com</a></span><br>
+<span id="email" class="email"><a href="mailto:damien.lespiau@gmail.com">damien.lespiau@gmail.com</a></span><br>
 <span id="revnumber">version 0.1</span>
 </div>
 <div id="toc" class="toc">
@@ -530,8 +530,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_sources">Sources</a></li>
 </ul>
 </li>
+<li><a href="#_the_journey_of_a_go_program">The journey of a go program</a>
+<ul class="sectlevel2">
+<li><a href="#_overview">Overview</a></li>
+<li><a href="#_initialisation">Initialisation</a></li>
+<li><a href="#_inlining">Inlining</a></li>
 <li><a href="#_escape_analysis">Escape Analysis</a></li>
 <li><a href="#_ssa">SSA</a></li>
+</ul>
+</li>
 <li><a href="#_interaction_with_the_runtime">Interaction with the runtime</a>
 <ul class="sectlevel2">
 <li><a href="#_growing_stacks">Growing stacks</a></li>
@@ -560,6 +567,9 @@ compiler distributed as part of the <a href="https://golang.org/">Go project</a>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_quick_history">Quick history</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -612,8 +622,8 @@ main.go  main.o</code></pre>
 <h3 id="_filesystem_layout">Filesystem layout</h3>
 <div class="paragraph">
 <p>While to the <code>go</code> binary is in <code>$GOROOT/bin</code>, tools are located in
-<code>$GOROOT/pkg/tool/$GOOS_$GOARCH</code>. On Linux with x86‑64 processor, the compiler
-can be found in <code>$GOROOT/pkg/tool/linux_amd64</code>.</p>
+<code>$GOROOT/pkg/tool/$GOOS_$GOARCH</code>. On Linux with an x86‑64 processor, the
+compiler can be found in <code>$GOROOT/pkg/tool/linux_amd64</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -671,20 +681,216 @@ the topic discussed in the rest of this article.</p>
 </div>
 <div class="sect2">
 <h3 id="_sources">Sources</h3>
-
+<div class="paragraph">
+<p>TODO</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_escape_analysis">Escape Analysis</h2>
-<div class="sectionbody">
-
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ssa">SSA</h2>
+<h2 id="_the_journey_of_a_go_program">The journey of a go program</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_overview">Overview</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialisation.</p>
+</li>
+<li>
+<p>Lexical analysis and parsing into the <code>cmd/compile/internal/syntax</code> AST.</p>
+</li>
+<li>
+<p>Translation into the <code>cmd/compile/internal/gc</code> AST.</p>
+</li>
+<li>
+<p>Some gc AST passes: type checking, escape analysis, inlining,
+closure handling, expression evaluation ordering (order.go),
+and some lowering and optimisation (walk.go).</p>
+</li>
+<li>
+<p>Translation into the cmd/compile/internal/ssa SSA form.</p>
+</li>
+<li>
+<p>Optimisation and lowering of SSA form.</p>
+</li>
+<li>
+<p>Translation from SSA form to assembler instructions.</p>
+</li>
+<li>
+<p>Translation from assembler instructions to machine code.</p>
+</li>
+<li>
+<p>Writing lots of output: machine code, DWARF symbols,
+type and reflection info, export data</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It seems there&#8217;s a will to get rid of the <code>gc</code> AST in favour of the
+<code>syntax</code> one (<a href="https://go-review.googlesource.com/c/40693/">source</a>) and
+eliminate one of the tree representations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_initialisation">Initialisation</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+<div class="paragraph">
+<p>The main function is in.</p>
+</div>
+<div class="paragraph">
+<p>Talk about universe block.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inlining">Inlining</h3>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Inline_expansion">Inlining</a> is quite an important
+optimisation. Not only it removes some function call overhead but, more
+importantly, it enables further function-wide optimisations at a later stage.</p>
+</div>
+<div class="paragraph">
+<p>The inlining code is in <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go" target="_blank">inl.go</a> with a nice
+explanatory comment at the top of the file. A first pass in
+<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L91" target="_blank">caninl</a> decides which functions can be
+inlined. A second pass, <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L334" target="_blank">inlcalls</a>, will
+expand inlinable functions at their call sites.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L187" target="_blank">ishairylist</a> and
+<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L196" target="_blank">ishairy</a>  walk the function and decide if
+it&#8217;s too <em>hairy</em> (ie. complex) to be inlined or not with a budget of 80 AST
+nodes.</p>
+</div>
+<div class="paragraph">
+<p>The Go compiler can inline across package boundaries.</p>
+</div>
+<div class="paragraph">
+<p>The inliner only inlines leaf functions (with
+<a href="https://github.com/golang/go/commit/77ccb16eb12f461eaea5fdf652a2e929dc154192" target="_blank">some exceptions</a>).
+<a href="https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md" target="_blank">Mid-stack
+inlining</a> is in the pipeline.</p>
+</div>
+<div class="paragraph">
+<p>The <code>-m</code> flag can be used to see the inliner in action:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="go"><span class="keyword">package</span> main
 
+<span class="keyword">import</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">fmt</span><span class="delimiter">&quot;</span></span>
+
+<span class="keyword">func</span> add(a, b <span class="predefined-type">int</span>) <span class="predefined-type">int</span> {
+        <span class="keyword">return</span> a + b
+}
+
+<span class="keyword">func</span> main() {
+        fmt.Println(<span class="string"><span class="delimiter">&quot;</span><span class="content">1 + 1 =</span><span class="delimiter">&quot;</span></span>, add(<span class="integer">1</span>, <span class="integer">1</span>))
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="shell">$ go tool compile -m inlined.go
+inlining/inlined/inlined.go:5: can inline add
+inlining/inlined/inlined.go:10: inlining call to add
+inlining/inlined/inlined.go:10: &quot;1 + 1 =&quot; escapes to heap
+inlining/inlined/inlined.go:10: add(1, 1) escapes to heap
+inlining/inlined/inlined.go:10: main ... argument does not escape</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The undocumented option <code>-m=2</code> gives more insights into the reasons the
+compiler doesn&#8217;t inline certain functions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="go">$ cat not-inlined.<span class="keyword">go</span>
+<span class="keyword">package</span> main
+
+<span class="keyword">func</span> dummy() {}
+
+<span class="keyword">func</span> ClosureCreation() {
+        _ = <span class="keyword">func</span>() {}
+}
+
+<span class="keyword">var</span> x = []<span class="predefined-type">byte</span>{<span class="integer">0</span>}
+
+<span class="keyword">func</span> RangeLoop() {
+        <span class="keyword">for</span> _ = <span class="keyword">range</span> x {
+        }
+}
+
+<span class="keyword">var</span> ch <span class="keyword">chan</span> <span class="keyword">struct</span>{}
+
+<span class="keyword">func</span> Select() {
+        <span class="keyword">select</span> {
+        <span class="keyword">case</span> &lt;-ch:
+        <span class="keyword">default</span>:
+        }
+}
+
+<span class="keyword">func</span> Go() {
+        <span class="keyword">go</span> dummy()
+}
+
+<span class="keyword">func</span> Defer() {
+        <span class="keyword">defer</span> dummy()
+}
+
+<span class="keyword">func</span> LocalTypeDecl() {
+        <span class="keyword">type</span> I <span class="predefined-type">int</span>
+}
+
+<span class="keyword">func</span> main() {
+        ClosureCreation()
+        RangeLoop()
+        Select()
+        Go()
+        Defer()
+        LocalTypeDecl()
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="shell">$ go tool compile -m=2 not-inlined.go
+inlining/not-inlined/not-inlined.go:3: can inline dummy as: func() {  }
+inlining/not-inlined/not-inlined.go:5: cannot inline ClosureCreation: unhandled op CLOSURE
+inlining/not-inlined/not-inlined.go:6: can inline ClosureCreation.func1 as: func() {  }
+inlining/not-inlined/not-inlined.go:11: cannot inline RangeLoop: unhandled op range
+inlining/not-inlined/not-inlined.go:18: cannot inline Select: unhandled op select
+inlining/not-inlined/not-inlined.go:25: cannot inline Go: unhandled op PROC
+inlining/not-inlined/not-inlined.go:29: cannot inline Defer: unhandled op defer
+inlining/not-inlined/not-inlined.go:33: cannot inline LocalTypeDecl: unhandled op DCLTYPE
+inlining/not-inlined/not-inlined.go:37: cannot inline main: non-leaf function
+inlining/not-inlined/not-inlined.go:6: ClosureCreation func literal does not escape</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_escape_analysis">Escape Analysis</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ssa">SSA</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -692,7 +898,9 @@ the topic discussed in the rest of this article.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_growing_stacks">Growing stacks</h3>
-
+<div class="paragraph">
+<p>TODO</p>
+</div>
 </div>
 </div>
 </div>
@@ -701,11 +909,15 @@ the topic discussed in the rest of this article.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_go_calling_convention">Go calling convention</h3>
-
+<div class="paragraph">
+<p>TODO</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_go_assembler">Go assembler</h3>
-
+<div class="paragraph">
+<p>TODO</p>
+</div>
 </div>
 </div>
 </div>
@@ -713,7 +925,7 @@ the topic discussed in the rest of this article.</p>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2017-04-12 22:10:05 BST
+Last updated 2017-04-16 17:58:56 BST
 </div>
 </div>
 </body>
