@@ -21,5 +21,5 @@ checkout-go:
 	git clone https://github.com/golang/go.git
 
 output:
-	go tool compile -m=2 inlining/not-inlined/not-inlined.go &> inlining/not-inlined/not-inlined.output
-	go tool compile -m inlining/inlined/inlined.go &> inlining/inlined/inlined.output
+	cd inlining/not-inlined && go tool compile -m=2 not-inlined.go &> not-inlined.output
+	cd inlining/inlined && go tool compile -m inlined.go &> inlined.output

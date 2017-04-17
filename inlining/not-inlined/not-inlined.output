@@ -1,10 +1,10 @@
-inlining/not-inlined/not-inlined.go:3: can inline dummy as: func() {  }
-inlining/not-inlined/not-inlined.go:5: cannot inline ClosureCreation: unhandled op CLOSURE
-inlining/not-inlined/not-inlined.go:6: can inline ClosureCreation.func1 as: func() {  }
-inlining/not-inlined/not-inlined.go:11: cannot inline RangeLoop: unhandled op range
-inlining/not-inlined/not-inlined.go:18: cannot inline Select: unhandled op select
-inlining/not-inlined/not-inlined.go:25: cannot inline Go: unhandled op PROC
-inlining/not-inlined/not-inlined.go:29: cannot inline Defer: unhandled op defer
-inlining/not-inlined/not-inlined.go:33: cannot inline LocalTypeDecl: unhandled op DCLTYPE
-inlining/not-inlined/not-inlined.go:37: cannot inline main: non-leaf function
-inlining/not-inlined/not-inlined.go:6: ClosureCreation func literal does not escape
+not-inlined.go:3: can inline dummy as: func() {  }
+not-inlined.go:5: cannot inline ClosureCreation: unhandled op CLOSURE
+not-inlined.go:6: can inline ClosureCreation.func1 as: func() {  }
+not-inlined.go:11: cannot inline RangeLoop: unhandled op range
+not-inlined.go:18: cannot inline Select: unhandled op select
+not-inlined.go:25: cannot inline Go: unhandled op PROC
+not-inlined.go:29: cannot inline Defer: unhandled op defer
+not-inlined.go:33: cannot inline LocalTypeDecl: unhandled op DCLTYPE
+not-inlined.go:37: cannot inline main: non-leaf function
+not-inlined.go:6: ClosureCreation func literal does not escape
