@@ -2,7 +2,7 @@
 Damien Lespiau <https://twitter.com/__damien__[@__damien__]>
 v0.1
 :docinfo1:
-:toc:
+:toc: preamble
 :icons: font
 :hide-uri-scheme:
 :source-highlighter: coderay
