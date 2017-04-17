@@ -1,6 +1,7 @@
 = Anatomy of the Go compiler
 Damien Lespiau <damien.lespiau@gmail.com>
 v0.1
+:docinfo1:
 :toc:
 :icons: font
 :hide-uri-scheme:

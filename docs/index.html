@@ -509,6 +509,7 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
+<a href="https://github.com/dlespiau/go-gc-anatomy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </head>
 <body class="article">
 <div id="header">
@@ -846,11 +847,11 @@ inlining</a> is in the pipeline.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="shell">$ go tool compile -m inlined.go
-inlining/inlined/inlined.go:5: can inline add
-inlining/inlined/inlined.go:10: inlining call to add
-inlining/inlined/inlined.go:10: &quot;1 + 1 =&quot; escapes to heap
-inlining/inlined/inlined.go:10: add(1, 1) escapes to heap
-inlining/inlined/inlined.go:10: main ... argument does not escape</code></pre>
+inlined.go:5: can inline add
+inlined.go:10: inlining call to add
+inlined.go:10: &quot;1 + 1 =&quot; escapes to heap
+inlined.go:10: add(1, 1) escapes to heap
+inlined.go:10: main ... argument does not escape</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -909,16 +910,16 @@ compiler doesn&#8217;t inline certain functions.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="shell">$ go tool compile -m=2 not-inlined.go
-inlining/not-inlined/not-inlined.go:3: can inline dummy as: func() {  }
-inlining/not-inlined/not-inlined.go:5: cannot inline ClosureCreation: unhandled op CLOSURE
-inlining/not-inlined/not-inlined.go:6: can inline ClosureCreation.func1 as: func() {  }
-inlining/not-inlined/not-inlined.go:11: cannot inline RangeLoop: unhandled op range
-inlining/not-inlined/not-inlined.go:18: cannot inline Select: unhandled op select
-inlining/not-inlined/not-inlined.go:25: cannot inline Go: unhandled op PROC
-inlining/not-inlined/not-inlined.go:29: cannot inline Defer: unhandled op defer
-inlining/not-inlined/not-inlined.go:33: cannot inline LocalTypeDecl: unhandled op DCLTYPE
-inlining/not-inlined/not-inlined.go:37: cannot inline main: non-leaf function
-inlining/not-inlined/not-inlined.go:6: ClosureCreation func literal does not escape</code></pre>
+not-inlined.go:3: can inline dummy as: func() {  }
+not-inlined.go:5: cannot inline ClosureCreation: unhandled op CLOSURE
+not-inlined.go:6: can inline ClosureCreation.func1 as: func() {  }
+not-inlined.go:11: cannot inline RangeLoop: unhandled op range
+not-inlined.go:18: cannot inline Select: unhandled op select
+not-inlined.go:25: cannot inline Go: unhandled op PROC
+not-inlined.go:29: cannot inline Defer: unhandled op defer
+not-inlined.go:33: cannot inline LocalTypeDecl: unhandled op DCLTYPE
+not-inlined.go:37: cannot inline main: non-leaf function
+not-inlined.go:6: ClosureCreation func literal does not escape</code></pre>
 </div>
 </div>
 </div>
@@ -968,7 +969,7 @@ inlining/not-inlined/not-inlined.go:6: ClosureCreation func literal does not esc
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2017-04-17 00:48:50 BST
+Last updated 2017-04-17 12:48:32 BST
 </div>
 </div>
 </body>
