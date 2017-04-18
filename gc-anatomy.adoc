@@ -35,9 +35,15 @@ WORK=/tmp/go-build049312878
 mkdir -p $WORK/_/home/damien/src/hello-world/_obj/
 mkdir -p $WORK/_/home/damien/src/hello-world/_obj/exe/
 cd /home/damien/src/hello-world
-$GOROOT/pkg/tool/linux_amd64/compile -o $WORK/_/home/damien/src/hello-world.a -trimpath $WORK -p main -complete -buildid b41aca5027f01d4edf98e1676ee20bd7375510e3 -D _/home/damien/src/hello-world -I $WORK -pack ./main.go
+$GOROOT/pkg/tool/linux_amd64/compile -o $WORK/_/home/damien/src/hello-world.a \
+	-trimpath $WORK -p main -complete \
+	-buildid b41aca5027f01d4edf98e1676ee20bd7375510e3 \
+	-D _/home/damien/src/hello-world -I $WORK -pack ./main.go
 cd .
-$GOROOT/pkg/tool/linux_amd64/link -o $WORK/_/home/damien/src/hello-world/_obj/exe/a.out -L $WORK -extld=gcc -buildmode=exe -buildid=b41aca5027f01d4edf98e1676ee20bd7375510e3 $WORK/_/home/damien/src/hello-world.a
+$GOROOT/pkg/tool/linux_amd64/link \
+	-o $WORK/_/home/damien/src/hello-world/_obj/exe/a.out -L $WORK -extld=gcc \
+	-buildmode=exe -buildid=b41aca5027f01d4edf98e1676ee20bd7375510e3 \
+	$WORK/_/home/damien/src/hello-world.a
 cp $WORK/_/home/damien/src/hello-world/_obj/exe/a.out hello-world
 ----
 
