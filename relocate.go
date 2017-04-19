@@ -14,6 +14,24 @@ import (
 	"strings"
 )
 
+// relocate is a preprocessor replacing special markers pointing to files and
+// file-level declarations (const, var and func declarations) by github links.
+//
+// To do the latter, relocate needs to parse the .go file, find the symbol,
+// derive the line number and construct the appropriate link. Because those
+// lines can defer differ between revisions, links are tied to a specific git
+// hash.
+//
+// Examples:
+//
+//     @@src/cmd/compile/internal/gc/inl.go@@ ->
+//     https://github.com/golang/go/tree/$commit_hash/src/cmd/compile/internal/gc/inl.go
+//
+//     @@src/cmd/compile/internal/gc/inl.go:ishairy@@ ->
+//     https://github.com/golang/go/tree/$commit_hash/src/cmd/compile/internal/gc/inl.go#L196
+//
+// To work, relocate needs a local go checkout placed in ./go.
+
 func findHeadCommit(path string) (hash string, err error) {
 	cmd := exec.Command("git", "rev-parse", "HEAD")
 	cmd.Dir = path
