@@ -601,9 +601,15 @@ WORK=/tmp/go-build049312878
 mkdir -p $WORK/_/home/damien/src/hello-world/_obj/
 mkdir -p $WORK/_/home/damien/src/hello-world/_obj/exe/
 cd /home/damien/src/hello-world
-$GOROOT/pkg/tool/linux_amd64/compile -o $WORK/_/home/damien/src/hello-world.a -trimpath $WORK -p main -complete -buildid b41aca5027f01d4edf98e1676ee20bd7375510e3 -D _/home/damien/src/hello-world -I $WORK -pack ./main.go
+$GOROOT/pkg/tool/linux_amd64/compile -o $WORK/_/home/damien/src/hello-world.a \
+        -trimpath $WORK -p main -complete \
+        -buildid b41aca5027f01d4edf98e1676ee20bd7375510e3 \
+        -D _/home/damien/src/hello-world -I $WORK -pack ./main.go
 cd .
-$GOROOT/pkg/tool/linux_amd64/link -o $WORK/_/home/damien/src/hello-world/_obj/exe/a.out -L $WORK -extld=gcc -buildmode=exe -buildid=b41aca5027f01d4edf98e1676ee20bd7375510e3 $WORK/_/home/damien/src/hello-world.a
+$GOROOT/pkg/tool/linux_amd64/link \
+        -o $WORK/_/home/damien/src/hello-world/_obj/exe/a.out -L $WORK -extld=gcc \
+        -buildmode=exe -buildid=b41aca5027f01d4edf98e1676ee20bd7375510e3 \
+        $WORK/_/home/damien/src/hello-world.a
 cp $WORK/_/home/damien/src/hello-world/_obj/exe/a.out hello-world</code></pre>
 </div>
 </div>
@@ -683,31 +689,31 @@ the topic discussed in the rest of this article.</p>
 <div class="sect2">
 <h3 id="_sources">Sources</h3>
 <div class="paragraph">
-<p>The entry point of the compiler is in <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile" target="_blank"><code>compile</code></a> but the bulk of the
+<p>The entry point of the compiler is in <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile" target="_blank"><code>compile</code></a> but the bulk of the
 code is in various internal packages starting by
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a>. The internal packages are split between
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a>. The internal packages are split between
 compiler-specific ones in <code>src/cmd/compile/internal</code> and some used by several
 tools in <code>src/cmd/internal</code>. To list a few interesting ones:</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a></dt>
+<dt class="hdlist1"><a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a></dt>
 <dd>
 <p>main package, AST, type checking, inlining,
 escape analysis, closure handling, some optimisations and lowering on the AST.</p>
 </dd>
-<dt class="hdlist1"><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/syntax" target="_blank"><code>syntax</code></a></dt>
+<dt class="hdlist1"><a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/syntax" target="_blank"><code>syntax</code></a></dt>
 <dd>
 <p>Lexical analysis, tokenization and
 building of the first AST representation.</p>
 </dd>
-<dt class="hdlist1"><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/ssa" target="_blank"><code>ssa</code></a></dt>
+<dt class="hdlist1"><a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/ssa" target="_blank"><code>ssa</code></a></dt>
 <dd>
 <p>The backend part of the compiler is an
 <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">SSA IR</a> with many
 optimisations done at that level.</p>
 </dd>
-<dt class="hdlist1"><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/internal/obj" target="_blank"><code>obj</code></a></dt>
+<dt class="hdlist1"><a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/internal/obj" target="_blank"><code>obj</code></a></dt>
 <dd>
 <p>Machine code generation.</p>
 </dd>
@@ -759,20 +765,20 @@ type and reflection info, export data</p>
 <div class="sect2">
 <h3 id="_initialisation">Initialisation</h3>
 <div class="paragraph">
-<p>The entry point of the compiler is in <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/main.go" target="_blank"><code>main.go</code></a> but the
-interesting entry point is really <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/main.go#L113" target="_blank"><code>Main</code></a>
+<p>The entry point of the compiler is in <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/main.go" target="_blank"><code>main.go</code></a> but the
+interesting entry point is really <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/main.go#L114" target="_blank"><code>Main</code></a>
 in the <code>gc</code> package.</p>
 </div>
 <div class="paragraph">
 <p>Various tasks are done there: creating built-in packages like <code>unsafe</code>, setting
 up the <a href="https://golang.org/ref/spec#Blocks">universe block</a>
-(<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/universe.go" target="_blank"><code>universe.go</code></a>), parsing the command line options
+(<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/universe.go" target="_blank"><code>universe.go</code></a>), parsing the command line options
 and, finally building the <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>
 on which high-level passes are done.</p>
 </div>
 <div class="paragraph">
 <p>Once the files are parsed, the global variable
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/go.go#L168" target="_blank"><code>xtop</code></a> contains the list of top level <code>Nodes</code>.</p>
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/go.go#L168" target="_blank"><code>xtop</code></a> contains the list of top level <code>Nodes</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -782,10 +788,10 @@ on which high-level passes are done.</p>
 </td>
 <td class="content">
 There are actually two different AST. One in the
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/syntax" target="_blank"><code>syntax</code></a> package and one in the
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a> package. The former is transformed into the
-latter right at the start (in <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/noder.go" target="_blank"><code>noder.go</code></a>,
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/noder.go#L20" target="_blank"><code>parseFiles</code></a>). It seems there&#8217;s a will
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/syntax" target="_blank"><code>syntax</code></a> package and one in the
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc" target="_blank"><code>gc</code></a> package. The former is transformed into the
+latter right at the start (in <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/noder.go" target="_blank"><code>noder.go</code></a>,
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/noder.go#L20" target="_blank"><code>parseFiles</code></a>). It seems there&#8217;s a will
 to get rid of the <code>gc</code> AST in favour of the <code>syntax</code> one
 (<a href="https://go-review.googlesource.com/c/40693/">source</a>).
 </td>
@@ -805,15 +811,15 @@ optimisation. Not only it removes some function call overhead but, more
 importantly, it enables further function-wide optimisations at a later stage.</p>
 </div>
 <div class="paragraph">
-<p>The inlining code is in <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go" target="_blank"><code>inl.go</code></a> with a nice
+<p>The inlining code is in <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/inl.go" target="_blank"><code>inl.go</code></a> with a nice
 explanatory comment at the top of the file. A first pass in
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L91" target="_blank"><code>caninl</code></a> decides which functions can be
-inlined. A second pass, <a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L334" target="_blank"><code>inlcalls</code></a>, will
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/inl.go#L91" target="_blank"><code>caninl</code></a> decides which functions can be
+inlined. A second pass, <a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/inl.go#L324" target="_blank"><code>inlcalls</code></a>, will
 expand inlinable functions at their call sites.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L187" target="_blank"><code>ishairylist</code></a> and
-<a href="https://github.com/golang/go/tree/a306a851cc63f362335b991a0fb250c9d83dcb4d/src/cmd/compile/internal/gc/inl.go#L196" target="_blank"><code>ishairy</code></a>  walk the function and decide if
+<p><a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/inl.go#L187" target="_blank"><code>ishairylist</code></a> and
+<a href="https://github.com/golang/go/tree/94e44a9c8edb64f514b6f3b7f7001db0cfeb2d70/src/cmd/compile/internal/gc/inl.go#L196" target="_blank"><code>ishairy</code></a>  walk the function and decide if
 it&#8217;s too <em>hairy</em> (ie. complex) to be inlined or not with a budget of 80 AST
 nodes.</p>
 </div>
@@ -969,7 +975,7 @@ not-inlined.go:6: ClosureCreation func literal does not escape</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2017-04-17 22:26:02 BST
+Last updated 2017-04-23 21:30:02 BST
 </div>
 </div>
 </body>
